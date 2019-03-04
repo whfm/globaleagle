@@ -4,9 +4,9 @@
 
         <div>
         <div class="input-group" style="width: 300px;">
-            <input type="text" class="form-control" placeholder="Enter Temperature" v-model="tempInput">
-            <div class="input-group-prepend">
-                <div class="input-group-text">ºC</div>
+            <input type="text" class="form-control first" placeholder="Enter Temperature" v-model="tempInput">
+            <div class="input-group-prepend firstInput">
+                <div class="input-group-text firstInput">ºC</div>
             </div>
             <p>&nbsp&nbsp&nbsp</p>
             <button type="button" class="btn btn-success" v-on:click="addTemp">Add</button>
@@ -15,22 +15,20 @@
 
         <p><strong>Temperature List : </strong></p>
         </div>
-            
-
-            
-
-            
             <br>
             <div class="d-flex flex-wrap">
             <div class="float-left">
                 <div class="d-flex flex-wrap">
                 <ul style="list-style: none;">
-                <span class="" >
+                <span>
                     <b>Current Temp:</b> {{ currentTemp }} ºC
                     <br><br>
                     
                     <li v-for="day in days">
                     Max {{ day.maxtempC }}ºC - Min {{day.mintempC}}ºC - {{day.date | formatDate}}          
+                    </li>
+                    <li v-for="day in daysAdded">
+                    Temperature added: {{ day.maxtempC }}ºC - {{days[0].date | formatDate}}   
                     </li>
                 </span>                
                 </ul>
@@ -40,27 +38,27 @@
                     <p><b>Important Values :</b></p>
                     <div class="input-group" style="width: 300px;">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">AVERAGE</div>
+                            <div class="input-group-text secondInput">AVERAGE</div>
                         </div>
-                    <input type="text" class="form-control" placeholder="Enter Temperature" v-model="average.toFixed(2)">                        
+                    <input type="text" class="form-control second" v-model="average.toFixed(2)">                        
                     </div>
                     <div class="input-group" style="width: 300px; margin-top: 5px">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">MEDIAN</div>
+                            <div class="input-group-text secondInput">MEDIAN</div>
                         </div>
-                    <input type="text" class="form-control" placeholder="Enter Temperature" v-model="median.toFixed(2)">                        
+                    <input type="text" class="form-control second" v-model="median.toFixed(2)">                        
                     </div>
                     <div class="input-group" style="width: 300px; margin-top: 5px">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">MAX</div>
+                            <div class="input-group-text secondInput">MAX</div>
                         </div>
-                    <input type="text" class="form-control" placeholder="Enter Temperature" v-model="max">                        
+                    <input type="text" class="form-control second" v-model="max">                        
                     </div>
                     <div class="input-group" style="width: 300px; margin-top: 5px">
                         <div class="input-group-prepend">
-                            <div class="input-group-text">MIN</div>
+                            <div class="input-group-text secondInput">MIN</div>
                         </div>
-                    <input type="text" class="form-control" placeholder="Enter Temperature" v-model="min">                        
+                    <input type="text" class="form-control second" v-model="min">                        
                     </div>
                 </div>
             </div>
@@ -83,7 +81,8 @@
                 max: "",
                 min: "",
                 tempInput: "",
-                allTemps: []
+                allTemps: [],
+                daysAdded: []
             }
         },
         created:function(){
@@ -108,13 +107,7 @@
                             vm.max = vm.days[i].maxtempC;
                         }
                     }
-                    var med = 0, numsLen = vm.allTemps.length;
-                    vm.allTemps.sort();
-                
-                    if (numsLen % 2 === 0) {
-                        med = (vm.allTemps[numsLen / 2 - 1] + vm.allTemps[numsLen / 2]) / 2;
-                    } else { med = vm.allTemps[(numsLen - 1) / 2]; }
-                    vm.median = med;
+                    vm.medCalc();
                 });
 
         },
@@ -127,16 +120,55 @@
         methods: {           
             addTemp: function () {
                 this.allTemps.push(this.tempInput);
-                console.log(this.allTemps);
+                if (Number(this.min) > Number(this.tempInput)) { this.min = Number(this.tempInput); }
+                if (Number(this.max) < Number(this.tempInput)) { this.max = Number(this.tempInput); }
+                if (Number(this.max) < Number(this.tempInput)) { this.max = Number(this.tempInput); }
+                var sum = 0;
+                for( var i = 0; i < this.allTemps.length; i++ ){
+                    sum += parseInt(this.allTemps[i], 10);
+                }
+                var avg = sum/this.allTemps.length;
+                this.average = avg;
+
+                this.medCalc();
+
+                let a = {  maxtempC: this.tempInput };
+                this.daysAdded.push(a);
             },
+            medCalc: function name(params) {
+                var med = 0, numsLen = this.allTemps.length;
+                this.allTemps.sort();
+            
+                if (numsLen % 2 === 0) {
+                    med = (this.allTemps[numsLen / 2 - 1] + this.allTemps[numsLen / 2]) / 2;
+                } else { med = this.allTemps[(numsLen - 1) / 2]; }
+                this.median = med;
+            }
         }       
     }
 </script>
 
 <style>
 
-    .input-group-text {
-        color: blue;    
+    .input-group-text.secondInput {
+        background-color: rgb(123,204,101);    
+    }
+
+    .form-control.second {
+        background-color: rgb(217,243,198);
+    }
+
+    .btn.btn-success {
+        background-color: rgb(120,205,101);
+    }
+
+    .input-group-text.firstInput {
+        height: 40px;
+        background-color: rgb(124,181,234);
+    }
+    .form-control.first {
+        height: 40px;
+        background-color: rgb(232,243,247);
     }
 
     .hubMain{
@@ -145,7 +177,7 @@
     }
 
     li { background: white; }
-    li:nth-child(odd) { background: rgb(245,249,252); }
+    li:nth-child(even) { background: rgb(245,249,252); }
 
     body {
         color: rgb(246,246,246);
@@ -173,6 +205,10 @@
 
     span.day_forecast{
         padding: 1%;
+    }
+    
+    p, span { 
+        color: black;
     }
 
     span.day_forecast .day_forecast_date{
