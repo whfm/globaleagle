@@ -99,12 +99,11 @@
                         vm.average += Number(vm.days[i].mintempC);
                         vm.average += Number(vm.days[i].maxtempC);
                         vm.average = vm.average / 16;
-                        if (vm.days[i].mintempC > vm.min) {
-                            vm.min = vm.days[i].mintempC;
-                            
+                        if (Number(vm.days[i].mintempC) < Number(vm.min)) {
+                            vm.min = vm.days[i].mintempC;                            
                         }
-                        if (vm.days[i].maxtempC > vm.max) {
-                            vm.max = vm.days[i].maxtempC;
+                        if (Number(vm.days[i].maxtempC) >= Number(vm.max)) {
+                            vm.max = vm.days[i].maxtempC;                            
                         }
                     }
                     vm.medCalc();

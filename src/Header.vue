@@ -1,8 +1,6 @@
 <template>
     <div class="hubHeader">        
-        <p class="hubTitle">
-            <img src="footer_global_eagle_white.svg" width="200" height="100" alt="globaleagle"> 
-            - Temperature</p>            
+        <p class="hubTitle">VueJS - Temperature Checker in Montreal</p>            
     </div>
 </template>
 
@@ -14,11 +12,10 @@
 
     .hubHeader {
         background-color: rgb(122,183,230);
-        height: 75px;
+        height: 50px;
     }
 
     .hubTitle {
-        margin-top: -20px;
         font-size: 25px;
         color: white;
         padding-left: 20%;
