@@ -87,7 +87,7 @@
         },
         created:function(){
             let vm = this;
-            Axios.get('http://api.worldweatheronline.com/premium/v1/weather.ashx?key=b2bc3231267b4f28816191904190103&q=Montreal&format=json&date_format=unix&num_of_days=8')
+            Axios.get('https://api.worldweatheronline.com/premium/v1/weather.ashx?key=b2bc3231267b4f28816191904190103&q=Montreal&format=json&date_format=unix&num_of_days=8')
                 .then(function(response){
                     vm.place = response.data.data;
                     vm.days = vm.place.weather;
